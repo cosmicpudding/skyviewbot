@@ -1,6 +1,6 @@
 # SkyviewBot
 SkyviewBot: base repo to go alongside "Good Coding Practice" (ASTERICS-OBELICS 2019).   
-See also GCP talk slides: URL TO COME HERE ONCE SLIDES ARE DONE
+See also GCP talk slides: https://drive.google.com/open?id=1vdV290w_2hsvVmsoXKdgTo1hQuGxMhlU
 
 ### Overview
 The main goal of this repository is to introduce three primary concepts in good coding practices: 1) argument parsing, 2) modularisation, and 3) docstrings. The code will "run" as it is (once the setup is done), but there are many ways to improve on what it does with better structure and more customised options.
