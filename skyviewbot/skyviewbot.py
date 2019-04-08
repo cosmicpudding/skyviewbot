@@ -6,7 +6,8 @@ __author__ = "YOUR NAME HERE"
 __date__ = "$08-apr-2019 12:00:00$"
 __version__ = "0.1"
 
-from modules.functions import *
+import sys
+from functions import *
 from argparse import ArgumentParser, RawTextHelpFormatter
 import aplpy
 import matplotlib.pyplot as plt
@@ -49,7 +50,7 @@ def skyviewbot(*args):
                         default=None,
                         type=str,
                         help='Specify name of a custom fits file to use as input (default: %(default)s)')
-    args = parser.parse_args()
+    parser_args = parser.parse_args(*args)
 
     # Download an image of choice or use existing one
 
@@ -60,12 +61,12 @@ def skyviewbot(*args):
     # - what if the FITS file of choice is online somewhere, to be downloaded?
     # - what if the user can't get Java working, can you provide an astroquery.Skyview alternative?
 
-    if args.skyview:
+    if parser_args.skyview:
         # All parameters in this should be set properly using argparse
-        # e.g. call_skyview(args.field, args.survey, args.pos, args.fov, args.coord)
+        # e.g. call_skyview(parser_args.field, parser_args.survey, parser_args.pos, parser_args.fov, parser_args.coord)
         fits_name = call_skyview('PKS1657-298', 'DSS', (255.291, -29.911), 1, 'J2000')
-    elif args.fits_name:
-        fits_name = args.fits_name
+    elif parser_args.fits_name:
+        fits_name = parser_args.fits_name
     else:
         fits_name = 'results/Skyview_PKS1657-298_DSS.fits'
 
@@ -135,4 +136,4 @@ def skyviewbot(*args):
 
 
 if __name__ == '__main__':
-    skyviewbot(sys.argv)
+    skyviewbot(sys.argv[1:])

@@ -9,6 +9,9 @@ __version__ = "0.1"
 import os
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+from astroquery.skyview import SkyView
+from astropy.coordinates import SkyCoord
+import astropy.units as u
 
 
 def call_skyview(field, survey, pos, fov, coord, proj='Car', pix=500):
@@ -33,18 +36,17 @@ def call_skyview(field, survey, pos, fov, coord, proj='Car', pix=500):
         'skyview_B0329+54_nvss.fits'
     """
 
-    # Assign position coordinates
-    x, y = pos[0], pos[1]
+    x, y = pos
+
+    images = SkyView.get_images(SkyCoord(ra=x*u.deg, dec=y*u.deg), survey,
+                                coordinates=coord,
+                                projection=proj, pixels=pix,
+                                height=fov*u.deg, width=fov*u.deg)
 
     # Construct name of the resulting file
     fitsname = "Skyview_{field}_{survey}.fits".format(**locals())
 
-    # Construct and send the command
-    cmd = 'java -jar skyview.jar coordinates={coord} projection={proj} position={x:.4f},{y:.4f} size={fov},{fov} pixels={pix},{pix} survey="{survey}" output="results/{fitsname}"'.format(**locals())
-    print(cmd)
-    print('Executing command...')
-    os.system(cmd)
-    print('... done!')
+    images[0][0].writeto(fitsname)
 
     return (fitsname)
 
@@ -74,9 +76,10 @@ def upload_to_google(img_path):
     drive = GoogleDrive(gauth)
 
     with open(img_path, "r") as img_file:
-        file_drive = drive.CreateFile({'title': os.path.basename(img_file.name), "parents": [{"kind": "drive#fileLink", "id": folder_id}]})
-        file_drive.SetContentFile(img_path)
-        file_drive.Upload()
+        pass
+        #file_drive = drive.CreateFile({'title': os.path.basename(img_file.name), "parents": [{"kind": "drive#fileLink", "id": folder_id}]})
+        #file_drive.SetContentFile(img_path)
+        #file_drive.Upload()
 
     # This part returns the Google Drive ID of the file
     # We need this for the Slack upload
@@ -119,4 +122,4 @@ def send_to_slack(msg_color, msg_text, field, slack_id, image_id):
     # Send the command
     cmd = """curl -X POST --data-urlencode 'payload=%s' https://hooks.slack.com/services/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""" % (full_msg)
     print(cmd)
-    os.system(cmd)
+    #os.system(cmd)
