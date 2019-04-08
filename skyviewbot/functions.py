@@ -13,6 +13,18 @@ from astroquery.skyview import SkyView
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 import logging
+import aplpy
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+# Set matplotlib plotting parameters
+# This is because the defaults are sub-optimal
+# Maybe you can think of a better way to handle these parameters ;)
+mpl.rcParams['xtick.direction'] = 'in'
+mpl.rcParams['ytick.direction'] = 'in'
+mpl.rcParams['xtick.top'] = True
+mpl.rcParams['ytick.right'] = True
+
 
 logger = logging.getLogger(__name__)
 
@@ -159,3 +171,27 @@ def coords_from_name(field_name):
     coord = SkyCoord.from_name(field_name)
 
     return coord.ra.to(u.deg).value, coord.dec.to(u.deg).value
+
+
+def plot_fits(fits_name, plot_title, cmap_name, colorbar, output_name):
+    """Make a JPEG plot out of a FITS file
+    
+    Args:
+        fits_name (str): path of fits file
+        plot_title (str): plot title
+        cmap_name (str): name of colormap
+        colorbar (bool): include colorbar
+        output_name (str): where to save the output
+    
+    Returns:
+        None
+    """
+    f = aplpy.FITSFigure(fits_name, figsize=(10, 8))
+    plt.title(plot_title)
+    f.show_colorscale(cmap=cmap_name, stretch='linear')
+    f.ticks.set_color('k')
+    if colorbar:
+        f.add_colorbar()
+
+    # Note: bbox_inches='tight' gets rid of annoying white space, very useful!
+    plt.savefig(output_name, dpi=200, bbox_inches='tight')
