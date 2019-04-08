@@ -87,7 +87,7 @@ def skyviewbot(*args):
     # Current parameters
     cmap_name = 'viridis'
     colorbar = True  # As an Aussie, I really struggle with American spelling in Python
-    img_name = 'This_should_be_a_better_filename.jpg'
+    img_name = fits_name.replace(".fits", ".jpg")
 
     # Construct the figure
     f = aplpy.FITSFigure(fits_name, figsize=(10, 8))
@@ -128,7 +128,7 @@ def skyviewbot(*args):
     slack_id = None  # This should be your own Slack ID, if you're testing the code
 
     # Check for Slack ID
-    if not slack_id:
+    if slack_id:
         send_to_slack(msg_color, msg_text, field, slack_id, image_id)
     else:
         print('You should change the ??? to be your Slack ID before posting! Exiting...')
