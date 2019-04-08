@@ -213,10 +213,6 @@ def skyviewbot(slack_id, fieldname, fits_name, msg_text, survey, radius, colorma
         plot_fits(fits_name, fieldname, colormap, True, img_name)
         image_id = upload_to_google(img_name, dry_run=dry_run)
 
-    # Clean up temporary fits file
-    if tempfitsfile:
-        tempfitsfile.delete()
-
     # Send the results to Slack
     msg_color = '#3D99DD'
     send_to_slack(msg_color, msg_text, fieldname, slack_id, image_id, dry_run=parser_args.dry_run)
