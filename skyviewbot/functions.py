@@ -12,6 +12,9 @@ from pydrive.drive import GoogleDrive
 from astroquery.skyview import SkyView
 from astropy.coordinates import SkyCoord
 import astropy.units as u
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def call_skyview(field, survey, pos, fov, coord, proj='Car', pix=500):
@@ -133,7 +136,7 @@ def send_to_slack(msg_color, msg_text, field, slack_id, image_id, dry_run=False)
     # Send the command
     cmd = "curl -X POST --data-urlencode 'payload={}' ".format(full_msg) + \
           "https://hooks.slack.com/services/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"
-    print(cmd)
+    logger.debug(cmd)
     if not dry_run:
         os.system(cmd)
 
