@@ -46,7 +46,7 @@ def call_skyview(field, survey, pos, fov, coord, proj='Car', pix=500):
     # Construct name of the resulting file
     fitsname = "Skyview_{field}_{survey}.fits".format(**locals())
 
-    images[0][0].writeto(fitsname)
+    images[0][0].writeto(fitsname, overwrite=True)
 
     return (fitsname)
 
