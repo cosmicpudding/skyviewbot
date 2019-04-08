@@ -10,6 +10,7 @@ import os
 import sys
 from .functions import *
 from argparse import ArgumentParser, RawTextHelpFormatter
+import tempfile
 
 
 def main(*function_args):
@@ -66,16 +67,14 @@ def main(*function_args):
     else:
         fits_name = call_skyview(fieldname, parser_args.survey, (ra, dec), parser_args.radius, 'J2000')
 
-    # Make an image using aplpy
-    assert(os.path.isdir('results'))
-    img_name = 'results/' + fits_name.replace(".fits", ".jpg")
-    plot_fits(fits_name, fieldname, parser_args.colormap, True, img_name)
-
-    # Upload the image to Google/Dropbox
-    image_id = upload_to_google(img_name, dry_run=parser_args.dry_run)
+    # Make an image using aplpy and upload it to google
+    with tempfile.NamedTemporaryFile(suffix='.jpg') as tmpfile:
+        img_name = tmpfile.name
+        plot_fits(fits_name, fieldname, parser_args.colormap, True, img_name)
+        image_id = upload_to_google(img_name, dry_run=parser_args.dry_run)
 
     # Send the results to Slack
-    msg_color = '#3D99DD'  # Little known fact: this colour is known as Celestial Blue
+    msg_color = '#3D99DD'
     msg_text = parser_args.msg
     send_to_slack(msg_color, msg_text, fieldname, slack_id, image_id, dry_run=parser_args.dry_run)
 
