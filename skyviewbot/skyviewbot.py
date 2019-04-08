@@ -50,6 +50,10 @@ def skyviewbot(*args):
                         default=None,
                         type=str,
                         help='Specify name of a custom fits file to use as input (default: %(default)s)')
+    parser.add_argument('-i', '--slack_id',
+                        default=None,
+                        type=str,
+                        help='Your slack ID')
     parser_args = parser.parse_args(*args)
 
     # Download an image of choice or use existing one
@@ -125,7 +129,7 @@ def skyviewbot(*args):
 
     msg_color = '#3D99DD'  # Little known fact: this colour is known as Celestial Blue
     msg_text = 'PKS1657-298 is a great galaxy, maybe the best galaxy.'  # 1707.01542
-    slack_id = None  # This should be your own Slack ID, if you're testing the code
+    slack_id = parser_args.slack_id  # This should be your own Slack ID, if you're testing the code
 
     # Check for Slack ID
     if slack_id:
