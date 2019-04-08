@@ -172,9 +172,6 @@ def plot_fits(fits_name, plot_title, cmap_name, colorbar, output_name):
         cmap_name (str): name of colormap
         colorbar (bool): include colorbar
         output_name (str): where to save the output
-    
-    Returns:
-        None
     """
     f = aplpy.FITSFigure(fits_name, figsize=(10, 8))
     plt.title(plot_title)

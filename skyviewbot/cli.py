@@ -6,7 +6,6 @@ __author__ = "YOUR NAME HERE"
 __date__ = "$08-apr-2019 12:00:00$"
 __version__ = "0.1"
 
-import os
 import sys
 from .functions import *
 from argparse import ArgumentParser, RawTextHelpFormatter
