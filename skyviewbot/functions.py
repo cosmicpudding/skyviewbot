@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+"""Functions for skyviewbot"""
+
 # ASTERICS-OBELICS Good Coding Practices (functions.py)
 # V.A. Moss (vmoss.astro@gmail.com), with suggestions from T.J. Dijkema
 

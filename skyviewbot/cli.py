@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+"""Command-line interface for skyviewbot"""
+
 # ASTERICS-OBELICS Good Coding Practices (skyviewbot.py)
 # V.A. Moss (vmoss.astro@gmail.com), with suggestions from T.J. Dijkema
 
