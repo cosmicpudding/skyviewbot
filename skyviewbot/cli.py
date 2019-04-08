@@ -7,9 +7,8 @@ __date__ = "$08-apr-2019 12:00:00$"
 __version__ = "0.1"
 
 import sys
-from .functions import *
+from .functions import skyviewbot
 from argparse import ArgumentParser, RawTextHelpFormatter
-import tempfile
 
 
 def main(*function_args):
@@ -50,39 +49,14 @@ def main(*function_args):
                         default=False,
                         action='store_true',
                         help='Dry run: make image, do not post to google and slack (default: %(default)s')
-    parser_args = parser.parse_args(*function_args)
+    args = parser.parse_args(*function_args)
 
-    if not parser_args.slack_id:
+    if not args.slack_id:
         print('You should use your Slack ID before posting!')
         return False
 
-    slack_id = parser_args.slack_id
-
-    fieldname = parser_args.field
-    ra, dec = coords_from_name(fieldname)
-
-    if parser_args.fits_name:
-        tempfitsfile = None
-        fits_name = parser_args.fits_name
-    else:
-        tempfitsfile = tempfile.NamedTemporaryFile(suffix='.fits')
-        fits_name = tempfitsfile.name
-        call_skyview(parser_args.survey, (ra, dec), parser_args.radius, 'J2000', fits_name)
-
-    # Make an image using aplpy and upload it to google
-    with tempfile.NamedTemporaryFile(suffix='.jpg') as tmpfile:
-        img_name = tmpfile.name
-        plot_fits(fits_name, fieldname, parser_args.colormap, True, img_name)
-        image_id = upload_to_google(img_name, dry_run=parser_args.dry_run)
-
-    # Clean up temporary fits file
-    if tempfitsfile:
-        tempfitsfile.delete()
-
-    # Send the results to Slack
-    msg_color = '#3D99DD'
-    msg_text = parser_args.msg
-    send_to_slack(msg_color, msg_text, fieldname, slack_id, image_id, dry_run=parser_args.dry_run)
+    skyviewbot(args.slack_id, args.field, args.fits_name, args.msg, args.survey,
+               args.radius, args.colormap, dry_run=args.dry_run)
 
     return True
 

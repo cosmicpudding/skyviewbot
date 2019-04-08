@@ -16,6 +16,7 @@ import logging
 import aplpy
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import tempfile
 
 # Set matplotlib plotting parameters
 # This is because the defaults are sub-optimal
@@ -182,3 +183,42 @@ def plot_fits(fits_name, plot_title, cmap_name, colorbar, output_name):
 
     # Note: bbox_inches='tight' gets rid of annoying white space, very useful!
     plt.savefig(output_name, dpi=200, bbox_inches='tight')
+
+
+def skyviewbot(slack_id, fieldname, fits_name, msg_text, survey, radius, colormap, dry_run=False):
+    """
+
+    Args:
+        slack_id (str): Slack ID
+        fieldname (str): Field name, e.g. "M101"
+        fits_name (str): Name of fits file
+        msg_text (str): Message text
+        survey (str): Survey, e.g. "DSS"
+        radius (float): Radius
+        colormap (str): Colormap, e.g. "viridis"
+        dry_run (bool): Make image, do not post to slack or google
+    """
+    ra, dec = coords_from_name(fieldname)
+
+    if fits_name:
+        tempfitsfile = None
+    else:
+        tempfitsfile = tempfile.NamedTemporaryFile(suffix='.fits')
+        fits_name = tempfitsfile.name
+        call_skyview(survey, (ra, dec), radius, 'J2000', fits_name)
+
+    # Make an image using aplpy and upload it to google
+    with tempfile.NamedTemporaryFile(suffix='.jpg') as tmpfile:
+        img_name = tmpfile.name
+        plot_fits(fits_name, fieldname, colormap, True, img_name)
+        image_id = upload_to_google(img_name, dry_run=dry_run)
+
+    # Clean up temporary fits file
+    if tempfitsfile:
+        tempfitsfile.delete()
+
+    # Send the results to Slack
+    msg_color = '#3D99DD'
+    send_to_slack(msg_color, msg_text, fieldname, slack_id, image_id, dry_run=parser_args.dry_run)
+
+    return True
