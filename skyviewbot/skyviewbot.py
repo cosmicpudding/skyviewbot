@@ -46,6 +46,10 @@ def skyviewbot(*args):
                         default=False,
                         action='store_true',
                         help='Specify whether to download a region from Skyview (default: %(default)s)')
+    parser.add_argument('-d', '--dry_run',
+                        default=False,
+                        action='store_true',
+                        help='Dry run: do download from skyview, do not post to google and slack (default: %(default)s')
     parser.add_argument('-f', '--fits_name',
                         default=None,
                         type=str,
@@ -115,7 +119,7 @@ def skyviewbot(*args):
     # - what happens if something goes wrong with the image upload?
 
     img_path = 'results/' + img_name
-    image_id = upload_to_google(img_path)
+    image_id = upload_to_google(img_path, dry_run=parser_args.dry_run)
 
     # Send the results to Slack
 
@@ -133,7 +137,7 @@ def skyviewbot(*args):
 
     # Check for Slack ID
     if slack_id:
-        send_to_slack(msg_color, msg_text, field, slack_id, image_id)
+        send_to_slack(msg_color, msg_text, field, slack_id, image_id, dry_run=parser_args.dry_run)
     else:
         print('You should change the ??? to be your Slack ID before posting! Exiting...')
         return

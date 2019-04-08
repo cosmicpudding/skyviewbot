@@ -51,17 +51,19 @@ def call_skyview(field, survey, pos, fov, coord, proj='Car', pix=500):
     return (fitsname)
 
 
-def upload_to_google(img_path):
+def upload_to_google(img_path, dry_run=False):
     """Upload a file using Google API to Google Drive folder
 
     Args:
         filename (str): name of file to upload, including path
+        dry_run (bool): dry run
 
     Returns:
         image_id (str): Google Drive image ID
 
     Examples:
-        >>> upload_to_google("test.jpg")
+        >>> upload_to_google("test.jpg", dry_run=True)
+        "dummy_google_id"
     """
 
     # Upload the resulting image to Google Drive
@@ -70,13 +72,15 @@ def upload_to_google(img_path):
     # This is a shared folder so automatically gives uploaded files read/write permission
     folder_id = "1OuvohOT1aBpYBLToG5eIJbfdW-Z5a8Nj"
 
+    if dry_run:
+        return "dummy_google_id"
+
     # Set up authorisation
     gauth = GoogleAuth()
     gauth.LocalWebserverAuth()
     drive = GoogleDrive(gauth)
 
     with open(img_path, "r") as img_file:
-        pass
         file_drive = drive.CreateFile({'title': os.path.basename(img_file.name), "parents": [{"kind": "drive#fileLink", "id": folder_id}]})
         file_drive.SetContentFile(img_path)
         file_drive.Upload()
