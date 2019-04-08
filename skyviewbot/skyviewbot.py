@@ -71,6 +71,14 @@ def skyviewbot(*function_args):
                         default='DSS',
                         type=str,
                         help="Survey name, e.g. 'DSS' (default: %(default)s)")
+    parser.add_argument('-r', '--radius',
+                        default=1.,
+                        type=float,
+                        help="Radius (default: %(default)s")
+    parser.add_argument('-c', '--colormap',
+                        default="viridis",
+                        type=str,
+                        help="Colormap (default: %(default)s")
     parser_args = parser.parse_args(*function_args)
 
     # Download an image of choice or use existing one
@@ -94,7 +102,7 @@ def skyviewbot(*function_args):
     if parser_args.skyview:
         # All parameters in this should be set properly using argparse
         # e.g. call_skyview(parser_args.field, parser_args.survey, parser_args.pos, parser_args.fov, parser_args.coord)
-        fits_name = call_skyview(fieldname, parser_args.survey, (ra, dec), 1, 'J2000')
+        fits_name = call_skyview(fieldname, parser_args.survey, (ra, dec), parser_args.radius, 'J2000')
     elif parser_args.fits_name:
         fits_name = parser_args.fits_name
     else:
@@ -113,7 +121,7 @@ def skyviewbot(*function_args):
     # - img_name (name of the produced output file)
 
     # Current parameters
-    cmap_name = 'viridis'
+    cmap_name = parser_args.colormap
     colorbar = True  # As an Aussie, I really struggle with American spelling in Python
     img_name = fits_name.replace(".fits", ".jpg")
 
