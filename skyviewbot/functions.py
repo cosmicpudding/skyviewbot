@@ -77,9 +77,9 @@ def upload_to_google(img_path):
 
     with open(img_path, "r") as img_file:
         pass
-        #file_drive = drive.CreateFile({'title': os.path.basename(img_file.name), "parents": [{"kind": "drive#fileLink", "id": folder_id}]})
-        #file_drive.SetContentFile(img_path)
-        #file_drive.Upload()
+        file_drive = drive.CreateFile({'title': os.path.basename(img_file.name), "parents": [{"kind": "drive#fileLink", "id": folder_id}]})
+        file_drive.SetContentFile(img_path)
+        file_drive.Upload()
 
     # This part returns the Google Drive ID of the file
     # We need this for the Slack upload
