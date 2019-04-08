@@ -8,7 +8,7 @@ __version__ = "0.1"
 
 import os
 import sys
-from functions import *
+from .functions import *
 from argparse import ArgumentParser, RawTextHelpFormatter
 import aplpy
 import matplotlib.pyplot as plt
