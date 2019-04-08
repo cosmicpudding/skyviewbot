@@ -25,10 +25,6 @@ def main(*function_args):
     parser = ArgumentParser(formatter_class=RawTextHelpFormatter)
     parser.add_argument('field', help="Field, e.g. 'M101'")
     parser.add_argument('msg', help="Message")
-    parser.add_argument('-d', '--dry_run',
-                        default=False,
-                        action='store_true',
-                        help='Dry run: do download from skyview, do not post to google and slack (default: %(default)s')
     parser.add_argument('-f', '--fits_name',
                         default=None,
                         type=str,
@@ -50,6 +46,10 @@ def main(*function_args):
                         default="viridis",
                         type=str,
                         help="Colormap (default: %(default)s")
+    parser.add_argument('-d', '--dry_run',
+                        default=False,
+                        action='store_true',
+                        help='Dry run: make image, do not post to google and slack (default: %(default)s')
     parser_args = parser.parse_args(*function_args)
 
     if not parser_args.slack_id:
@@ -84,6 +84,7 @@ def main(*function_args):
     msg_text = parser_args.msg
     send_to_slack(msg_color, msg_text, fieldname, slack_id, image_id, dry_run=parser_args.dry_run)
 
+    return True
 
 if __name__ == '__main__':
     main(sys.argv[1:])
