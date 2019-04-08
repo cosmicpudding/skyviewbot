@@ -132,3 +132,21 @@ def send_to_slack(msg_color, msg_text, field, slack_id, image_id, dry_run=False)
         os.system(cmd)
 
     return cmd
+
+
+def coords_from_name(field_name):
+    """Get ra, dec coordinates from a field name using astropy
+
+    Args:
+        field_name (str): Field name, e.g. 'M101'
+
+    Returns:
+        (float, float): ra, dec in degrees
+
+    Example:
+        >>> coords_from_name('M101')
+        (210.80242917, 54.34875)
+    """
+    coord = SkyCoord.from_name(field_name)
+
+    return coord.ra.to(u.deg).value, coord.dec.to(u.deg).value
