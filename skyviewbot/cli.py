@@ -23,7 +23,7 @@ mpl.rcParams['xtick.top'] = True
 mpl.rcParams['ytick.right'] = True
 
 
-def skyviewbot(*function_args):
+def main(*function_args):
     """Command-line interface to skyviewbot
 
     Args:
@@ -164,4 +164,4 @@ def skyviewbot(*function_args):
 
 
 if __name__ == '__main__':
-    skyviewbot(sys.argv[1:])
+    main(sys.argv[1:])
