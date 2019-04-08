@@ -19,7 +19,8 @@ The best image post will win a box of world-famous Dutch stroopwafels.
 
 ### Things you need to do to get this running:
 1) `git pull origin master` in School 2019, `conda env update -f environment.yml` (from T. Dijkema)
-2) `git clone https://github.com/cosmicpudding/skyviewbot.git` to a sensible location
+2) **Preferred: fork this repository, then `git clone` your version so you can push changes back**  
+Alternative: `git clone https://github.com/cosmicpudding/skyviewbot.git` to a sensible location
 3) Download `skyview.jar`: https://skyview.gsfc.nasa.gov/current/jar/skyview.jar
 4) Move `skyview.jar` to the main code folder (or change the path in `call_skyview()`
 5) When first running code: authenticate using autoskyview@gmail.com login details for Google Drive API
