@@ -197,8 +197,15 @@ def skyviewbot(slack_id, fieldname, fits_name, msg_text, survey, radius, colorma
         radius (float): Radius
         colormap (str): Colormap, e.g. "viridis"
         dry_run (bool): Make image, do not post to slack or google
+
+    Returns:
+        bool: True if everything went well
     """
     ra, dec = coords_from_name(fieldname)
+
+    if not dry_run and not os.path.isfile("client_secrets.json"):
+        logger.error("To upload to Google, you need client_secrets.json in your working directory")
+        return False
 
     if fits_name:
         tempfitsfile = None

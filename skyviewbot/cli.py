@@ -55,10 +55,9 @@ def main(*function_args):
         print('You should use your Slack ID before posting!')
         return False
 
-    skyviewbot(args.slack_id, args.field, args.fits_name, args.msg, args.survey,
-               args.radius, args.colormap, dry_run=args.dry_run)
+    return skyviewbot(args.slack_id, args.field, args.fits_name, args.msg, args.survey,
+                      args.radius, args.colormap, dry_run=args.dry_run)
 
-    return True
 
 if __name__ == '__main__':
     main(sys.argv[1:])
