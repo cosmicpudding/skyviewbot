@@ -63,15 +63,22 @@ def main(*function_args):
     ra, dec = coords_from_name(fieldname)
 
     if parser_args.fits_name:
+        tempfitsfile = None
         fits_name = parser_args.fits_name
     else:
-        fits_name = call_skyview(fieldname, parser_args.survey, (ra, dec), parser_args.radius, 'J2000')
+        tempfitsfile = tempfile.NamedTemporaryFile(suffix='.fits')
+        fits_name = tempfitsfile.name
+        call_skyview(parser_args.survey, (ra, dec), parser_args.radius, 'J2000', fits_name)
 
     # Make an image using aplpy and upload it to google
     with tempfile.NamedTemporaryFile(suffix='.jpg') as tmpfile:
         img_name = tmpfile.name
         plot_fits(fits_name, fieldname, parser_args.colormap, True, img_name)
         image_id = upload_to_google(img_name, dry_run=parser_args.dry_run)
+
+    # Clean up temporary fits file
+    if tempfitsfile:
+        tempfitsfile.delete()
 
     # Send the results to Slack
     msg_color = '#3D99DD'

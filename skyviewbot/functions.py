@@ -29,26 +29,21 @@ mpl.rcParams['ytick.right'] = True
 logger = logging.getLogger(__name__)
 
 
-def call_skyview(field, survey, pos, fov, coord, proj='Car', pix=500):
+def call_skyview(survey, pos, fov, coord, fitsname, proj='Car', pix=500):
     """Call Skyview to download data from a survey based on input parameters
 
     Args:
-        field (str): name of the field, used in naming the output file
         survey (str): name of survey, from https://skyview.gsfc.nasa.gov/current/cgi/survey.pl
         pos (float,float): position coordinates as a tuple
         fov (float): FOV in degrees
         coord (str): coordinate system (e.g. Galactic, J2000, B1950)
+        fitsname (str): name of output fits file
         proj (str): projection of image. (e.g. Car, Sin)
         pix (int): pixel dimensions of image (e.g. 500)
 
-    Returns:
-        str: name of resulting fits file
-
     Examples:
         >>> call_skyview('pks1657-298', 'dss', (255.291,-29.911), 5, 'J2000')
-        'skyview_pks1657-298_dss.fits'
         >>> call_skyview('B0329+54', 'nvss', (144.99497,-01.22029), 0.5, 'Gal')
-        'skyview_B0329+54_nvss.fits'
     """
 
     x, y = pos
@@ -58,12 +53,7 @@ def call_skyview(field, survey, pos, fov, coord, proj='Car', pix=500):
                                 projection=proj, pixels=pix,
                                 height=fov*u.deg, width=fov*u.deg)
 
-    # Construct name of the resulting file
-    fitsname = "Skyview_{field}_{survey}.fits".format(**locals())
-
     images[0][0].writeto(fitsname, overwrite=True)
-
-    return fitsname
 
 
 def upload_to_google(img_path, dry_run=False):
