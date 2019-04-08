@@ -215,6 +215,6 @@ def skyviewbot(slack_id, fieldname, fits_name, msg_text, survey, radius, colorma
 
     # Send the results to Slack
     msg_color = '#3D99DD'
-    send_to_slack(msg_color, msg_text, fieldname, slack_id, image_id, dry_run=parser_args.dry_run)
+    send_to_slack(msg_color, msg_text, fieldname, slack_id, image_id, dry_run=dry_run)
 
     return True
