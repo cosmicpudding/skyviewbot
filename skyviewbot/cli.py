@@ -38,7 +38,7 @@ def main(*function_args):
                         default=None,
                         type=str,
                         help='Your slack ID')
-    parser.add_argument('-n', '--survey',
+    parser.add_argument('-s', '--survey',
                         default='DSS',
                         type=str,
                         help="Survey name, e.g. 'DSS' (default: %(default)s)")
