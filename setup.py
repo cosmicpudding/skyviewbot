@@ -1,9 +1,9 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="SkyviewBot",
     version="0.1.0",
-    py_modules=["skyviewbot"],
+    packages=find_packages(),
     entry_points={
         'console_scripts': ['skyviewbot=skyviewbot.cli:main']
     }
