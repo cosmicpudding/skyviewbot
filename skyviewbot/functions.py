@@ -48,7 +48,7 @@ def call_skyview(field, survey, pos, fov, coord, proj='Car', pix=500):
 
     images[0][0].writeto(fitsname, overwrite=True)
 
-    return (fitsname)
+    return fitsname
 
 
 def upload_to_google(img_path, dry_run=False):
@@ -81,7 +81,8 @@ def upload_to_google(img_path, dry_run=False):
     drive = GoogleDrive(gauth)
 
     with open(img_path, "r") as img_file:
-        file_drive = drive.CreateFile({'title': os.path.basename(img_file.name), "parents": [{"kind": "drive#fileLink", "id": folder_id}]})
+        file_drive = drive.CreateFile({'title': os.path.basename(img_file.name),
+                                       "parents": [{"kind": "drive#fileLink", "id": folder_id}]})
         file_drive.SetContentFile(img_path)
         file_drive.Upload()
 
@@ -106,7 +107,11 @@ def send_to_slack(msg_color, msg_text, field, slack_id, image_id, dry_run=False)
 
     Examples:
         >>> send_to_slack('#3A143E', 'Test', 'Test', 'UH0H2QFC2', '1qWyC6xAHODREDfoZLH4qTYTDwt5m3EEk', dry_run=True)
-        'curl -X POST --data-urlencode \'payload={\n    "attachments": [\n        {\n            "color": "#3A143E",\n            "author_name": "<@UH0H2QFC2>",\n            "title": "SkyviewBot Image Post: Test",\n            "text": "Test",\n            "image_url" : "http://drive.google.com/uc?export=download&id=1qWyC6xAHODREDfoZLH4qTYTDwt5m3EEk"\n       }\n    ]\n}\' https://hooks.slack.com/services/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'
+        'curl -X POST --data-urlencode \'payload={\n    "attachments": [\n        {\n            "color": "#3A143E",'
+        '\n            "author_name": "<@UH0H2QFC2>",\n            "title": "SkyviewBot Image Post: Test",\n'
+        '            "text": "Test",\n            "image_url" : "http://drive.google.com/uc?export=download&id='
+        '1qWyC6xAHODREDfoZLH4qTYTDwt5m3EEk"\n       }\n    ]\n}\' https://hooks.slack.com/services/TAULG1ER1/BHQAUS8BW/'
+        'dKopfO7GIuge1ndOc0FF4Xq4'
     """
 
     # Replace characters in message text
@@ -126,7 +131,8 @@ def send_to_slack(msg_color, msg_text, field, slack_id, image_id, dry_run=False)
 }""" % (msg_color, slack_id, field, msg_text, image_id)
 
     # Send the command
-    cmd = """curl -X POST --data-urlencode 'payload=%s' https://hooks.slack.com/services/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""" % (full_msg)
+    cmd = "curl -X POST --data-urlencode 'payload={}' ".format(full_msg) + \
+          "https://hooks.slack.com/services/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"
     print(cmd)
     if not dry_run:
         os.system(cmd)
