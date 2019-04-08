@@ -86,7 +86,7 @@ def upload_to_google(img_path):
     return file_drive['id']
 
 
-def send_to_slack(msg_color, msg_text, field, slack_id, image_id):
+def send_to_slack(msg_color, msg_text, field, slack_id, image_id, dry_run=False):
     """Send a post to Slack using Slack webhooks
 
     Args:
@@ -95,12 +95,14 @@ def send_to_slack(msg_color, msg_text, field, slack_id, image_id):
         field (str): name of the field shown in the image posted
         slack_id (str): poster's Slack ID e.g. 'UH0H2QFC2'
         image_id (str): id of chosen image from Google Drive upload
+        dry_run (bool): just generate the command, don't execute it
 
     Returns:
-        None
+        str: the system command that's used to send this to slack (can be ignored)
 
     Examples:
-        >>> send_to_slack('#3A143E', 'Test', 'Test', 'UH0H2QFC2', '1qWyC6xAHODREDfoZLH4qTYTDwt5m3EEk')
+        >>> send_to_slack('#3A143E', 'Test', 'Test', 'UH0H2QFC2', '1qWyC6xAHODREDfoZLH4qTYTDwt5m3EEk', dry_run=True)
+        'curl -X POST --data-urlencode \'payload={\n    "attachments": [\n        {\n            "color": "#3A143E",\n            "author_name": "<@UH0H2QFC2>",\n            "title": "SkyviewBot Image Post: Test",\n            "text": "Test",\n            "image_url" : "http://drive.google.com/uc?export=download&id=1qWyC6xAHODREDfoZLH4qTYTDwt5m3EEk"\n       }\n    ]\n}\' https://hooks.slack.com/services/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'
     """
 
     # Replace characters in message text
@@ -122,4 +124,7 @@ def send_to_slack(msg_color, msg_text, field, slack_id, image_id):
     # Send the command
     cmd = """curl -X POST --data-urlencode 'payload=%s' https://hooks.slack.com/services/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""" % (full_msg)
     print(cmd)
-    #os.system(cmd)
+    if not dry_run:
+        os.system(cmd)
+
+    return cmd
