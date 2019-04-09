@@ -42,8 +42,8 @@ def call_skyview(survey, pos, fov, coord, fitsname, proj='Car', pix=500):
         pix (int): pixel dimensions of image (e.g. 500)
 
     Examples:
-        >>> call_skyview('pks1657-298', 'dss', (255.291,-29.911), 5, 'J2000')
-        >>> call_skyview('B0329+54', 'nvss', (144.99497,-01.22029), 0.5, 'Gal')
+        >>> call_skyview('DSS', (255.291,-29.911), 5., 'J2000', '/tmp/bla.fits')
+        >>> call_skyview('NVSS', (144.99497,-01.22029), 0.5, 'Gal', '/tmp/bla.fits')
     """
 
     x, y = pos
@@ -68,7 +68,7 @@ def upload_to_google(img_path, dry_run=False):
 
     Examples:
         >>> upload_to_google("test.jpg", dry_run=True)
-        "dummy_google_id"
+        'dummy_google_id'
     """
 
     # Upload the resulting image to Google Drive
@@ -112,10 +112,8 @@ def send_to_slack(msg_color, msg_text, field, slack_id, image_id, dry_run=False)
 
     Examples:
         >>> send_to_slack('#3A143E', 'Test', 'Test', 'UH0H2QFC2', '1qWyC6xAHODREDfoZLH4qTYTDwt5m3EEk', dry_run=True)
-        '{\n    "attachments": [\n        {\n            "color": "#3A143E",'
-        '\n            "author_name": "<@UH0H2QFC2>",\n            "title": "SkyviewBot Image Post: Test",\n'
-        '            "text": "Test",\n            "image_url" : "http://drive.google.com/uc?export=download&id='
-        '1qWyC6xAHODREDfoZLH4qTYTDwt5m3EEk"\n       }\n    ]\n}'
+        {'attachments': [{'color': '#3A143E', 'author_name': '<@UH0H2QFC2>', 'title': 'SkyviewBot Image Post: Test',\
+ 'text': 'Test', 'image_url': 'http://drive.google.com/uc?export=download&id=1qWyC6xAHODREDfoZLH4qTYTDwt5m3EEk'}]}
     """
 
     # Replace characters in message text
@@ -225,3 +223,7 @@ def skyviewbot(slack_id, fieldname, fits_name, msg_text, survey, radius, colorma
     send_to_slack(msg_color, msg_text, fieldname, slack_id, image_id, dry_run=dry_run)
 
     return True
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
