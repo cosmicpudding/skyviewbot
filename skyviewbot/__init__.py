@@ -6,4 +6,4 @@ The tool can be used with
 """
 
 from .cli import main
-from .functions import skyviewbot, call_skyview, coords_from_name, send_to_slack
+from .functions import skyviewbot, call_skyview, coords_from_name, send_to_slack, plot_fits
