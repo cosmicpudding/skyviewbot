@@ -20,7 +20,8 @@ def main(*function_args):
     """
 
     parser = ArgumentParser(formatter_class=RawTextHelpFormatter)
-    parser.add_argument('field', help="Field, e.g. 'M101'")
+    parser.add_argument('field', help='Field, e.g. "M101" or "255.2,1" (if it contains a comma, '
+                                      'it\'s interpreted as coordinates, otherwise fed to CDS)')
     parser.add_argument('msg', help="Message to accompany the post on Slack")
     parser.add_argument('-f', '--fits-name',
                         default=None,
