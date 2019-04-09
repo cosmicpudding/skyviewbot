@@ -102,3 +102,15 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# PyCharm
+.idea/
+
+# cache
+skycache/
+
+# Don't add fits files
+*.fits
+
+# Temporary files
+results/
