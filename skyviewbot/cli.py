@@ -22,12 +22,12 @@ def main(*function_args):
     parser = ArgumentParser(formatter_class=RawTextHelpFormatter)
     parser.add_argument('field', help="Field, e.g. 'M101'")
     parser.add_argument('msg', help="Message")
-    parser.add_argument('-f', '--fits_name',
+    parser.add_argument('-f', '--fits-name',
                         default=None,
                         type=str,
                         action="store",
                         help='Specify name of a custom fits file to use as input instead of skyview')
-    parser.add_argument('-i', '--slack_id',
+    parser.add_argument('-i', '--slack-id',
                         default=None,
                         type=str,
                         help='Your slack ID')
@@ -43,7 +43,7 @@ def main(*function_args):
                         default="viridis",
                         type=str,
                         help="Colormap (default: %(default)s)")
-    parser.add_argument('-d', '--dry_run',
+    parser.add_argument('-d', '--dry-run',
                         default=False,
                         action='store_true',
                         help='Dry run: make image, do not post to google and slack (default: %(default)s')
