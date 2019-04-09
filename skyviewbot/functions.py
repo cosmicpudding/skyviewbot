@@ -19,6 +19,7 @@ import aplpy
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import tempfile
+import requests
 
 # Set matplotlib plotting parameters
 # This is because the defaults are sub-optimal
@@ -115,37 +116,32 @@ def send_to_slack(msg_color, msg_text, field, slack_id, image_id, dry_run=False)
 
     Examples:
         >>> send_to_slack('#3A143E', 'Test', 'Test', 'UH0H2QFC2', '1qWyC6xAHODREDfoZLH4qTYTDwt5m3EEk', dry_run=True)
-        'curl -X POST --data-urlencode \'payload={\n    "attachments": [\n        {\n            "color": "#3A143E",'
+        '{\n    "attachments": [\n        {\n            "color": "#3A143E",'
         '\n            "author_name": "<@UH0H2QFC2>",\n            "title": "SkyviewBot Image Post: Test",\n'
         '            "text": "Test",\n            "image_url" : "http://drive.google.com/uc?export=download&id='
-        '1qWyC6xAHODREDfoZLH4qTYTDwt5m3EEk"\n       }\n    ]\n}\' https://hooks.slack.com/services/TAULG1ER1/BHQAUS8BW/'
-        'dKopfO7GIuge1ndOc0FF4Xq4'
+        '1qWyC6xAHODREDfoZLH4qTYTDwt5m3EEk"\n       }\n    ]\n}'
     """
 
     # Replace characters in message text
     msg_text = msg_text.replace("'", "")
 
     # Construct the full message
-    full_msg = """{
-    "attachments": [
-        {
-            "color": "%s",
-            "author_name": "<@%s>",
-            "title": "SkyviewBot Image Post: %s",
-            "text": "%s",
-            "image_url" : "http://drive.google.com/uc?export=download&id=%s"
-       }
-    ]
-}""" % (msg_color, slack_id, field, msg_text, image_id)
+    full_msg = {
+        "attachments": [
+            {
+                "color": msg_color,
+                "author_name": "<@{}>".format(slack_id),
+                "title": "SkyviewBot Image Post: {}".format(field),
+                "text": msg_text,
+                "image_url": "http://drive.google.com/uc?export=download&id={}".format(image_id)
+            }
+        ]
+    }
 
-    # Send the command
-    cmd = "curl -X POST --data-urlencode 'payload={}' ".format(full_msg) + \
-          "https://hooks.slack.com/services/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"
-    logger.debug(cmd)
     if not dry_run:
-        os.system(cmd)
+        requests.post("https://hooks.slack.com/services/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", json=full_msg)
 
-    return cmd
+    return full_msg
 
 
 def coords_from_name(field_name):
