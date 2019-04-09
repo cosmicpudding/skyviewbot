@@ -4,10 +4,6 @@
 # ASTERICS-OBELICS Good Coding Practices (skyviewbot.py)
 # V.A. Moss (vmoss.astro@gmail.com), with suggestions from T.J. Dijkema
 
-__author__ = "YOUR NAME HERE"
-__date__ = "$08-apr-2019 12:00:00$"
-__version__ = "0.1"
-
 import sys
 from .functions import skyviewbot
 from argparse import ArgumentParser, RawTextHelpFormatter
