@@ -21,16 +21,16 @@ def main(*function_args):
 
     parser = ArgumentParser(formatter_class=RawTextHelpFormatter)
     parser.add_argument('field', help="Field, e.g. 'M101'")
-    parser.add_argument('msg', help="Message")
+    parser.add_argument('msg', help="Message to accompany the post on Slack")
     parser.add_argument('-f', '--fits-name',
                         default=None,
                         type=str,
                         action="store",
-                        help='Specify name of a custom fits file to use as input instead of skyview')
+                        help='Specify name of a custom fits file to use as input instead of Skyview (default: %(default)s)')
     parser.add_argument('-i', '--slack-id',
                         default=None,
                         type=str,
-                        help='Your slack ID')
+                        help='Your Slack ID (default: %(default)s)')
     parser.add_argument('-s', '--survey',
                         default='DSS',
                         type=str,
