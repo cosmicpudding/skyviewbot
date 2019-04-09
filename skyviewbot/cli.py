@@ -30,7 +30,7 @@ def main(*function_args):
                         default=None,
                         type=str,
                         action="store",
-                        help='Specify name of a custom fits file to use as input (default: %(default)s)')
+                        help='Specify name of a custom fits file to use as input instead of skyview')
     parser.add_argument('-i', '--slack_id',
                         default=None,
                         type=str,
@@ -42,11 +42,11 @@ def main(*function_args):
     parser.add_argument('-r', '--radius',
                         default=1.,
                         type=float,
-                        help="Radius (default: %(default)s")
+                        help="Radius (default: %(default)s)")
     parser.add_argument('-c', '--colormap',
                         default="viridis",
                         type=str,
-                        help="Colormap (default: %(default)s")
+                        help="Colormap (default: %(default)s)")
     parser.add_argument('-d', '--dry_run',
                         default=False,
                         action='store_true',
@@ -57,8 +57,15 @@ def main(*function_args):
         print('You should use your Slack ID before posting!')
         return False
 
-    return skyviewbot(args.slack_id, args.field, args.fits_name, args.msg, args.survey,
-                      args.radius, args.colormap, dry_run=args.dry_run)
+    retval = skyviewbot(args.slack_id, args.field, args.fits_name, args.msg, args.survey,
+                        args.radius, args.colormap, dry_run=args.dry_run)
+
+    if retval:
+        print("SkyViewBot posted to Slack successfully")
+    else:
+        print("Some error happened in SkyViewBot")
+
+    return retval
 
 
 if __name__ == '__main__':
