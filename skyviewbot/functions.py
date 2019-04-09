@@ -184,7 +184,8 @@ def plot_fits(fits_name, plot_title, cmap_name, colorbar, output_name):
         f.add_colorbar()
 
     # Note: bbox_inches='tight' gets rid of annoying white space, very useful!
-    plt.savefig(output_name, dpi=200, bbox_inches='tight')
+    if output_name:
+        plt.savefig(output_name, dpi=200, bbox_inches='tight')
 
 
 def skyviewbot(slack_id, fieldname, fits_name, msg_text, survey, radius, colormap, dry_run=False):
