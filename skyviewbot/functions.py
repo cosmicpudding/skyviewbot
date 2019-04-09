@@ -185,7 +185,8 @@ def skyviewbot(slack_id, fieldname, fits_name, msg_text, survey, radius, colorma
 
     Args:
         slack_id (str): Slack ID
-        fieldname (str): Field name, e.g. "M101"
+        fieldname (str): Field, e.g. "M101" or "255.2,1" (if it contains a comma,
+                         it's interpreted as coordinates, otherwise fed to CDS)
         fits_name (str): Name of fits file
         msg_text (str): Message text
         survey (str): Survey, e.g. "DSS"
@@ -196,7 +197,11 @@ def skyviewbot(slack_id, fieldname, fits_name, msg_text, survey, radius, colorma
     Returns:
         bool: True if everything went well
     """
-    ra, dec = coords_from_name(fieldname)
+    if ',' in fieldname:
+        ra_str, dec_str = fieldname.split(',')
+        ra, dec = float(ra_str), float(dec_str)
+    else:
+        ra, dec = coords_from_name(fieldname)
 
     if not dry_run and not os.path.isfile("client_secrets.json"):
         logger.error("To upload to Google, you need client_secrets.json in your working directory")
